@@ -1,8 +1,9 @@
-name: CI
+name: PulangPergi
 on:
   workflow_dispatch:
     inputs:
       action:
+        description: action
         required: true
         default: 'checkin'
         type: choice
@@ -19,10 +20,15 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.8.10'
+          python-version: '3.8.18'
       - name: Setup Depedencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
       - name: Execute
         run: python main.py --action ${{ inputs.action }}
+        env:
+          HOST: ${{ vars.HOST }}
+          TOKEN: ${{ secrets.TOKEN }}
+          COORDINATE_LATITUDE: ${{ vars.COORDINATE_LATITUDE }}
+          COORDINATE_LONGITUDE: ${{ vars.COORDINATE_LONGITUDE }}

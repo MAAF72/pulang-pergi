@@ -33,13 +33,15 @@ def Checkin():
     try:
         last_checkin = api.GetLastCheckin()
 
-        if last_checkin['last_action'] == 1:
-            now = datetime.datetime.now(pytz.timezone('Asia/Jakarta'))
+        now = datetime.datetime.now(pytz.timezone('Asia/Jakarta'))
 
-            if last_checkin['date'] == str(now.date()):
+        if last_checkin != "" and last_checkin['date'] == str(now.date()):    
+            if last_checkin['last_action'] == 1:
                 api.Notify('Already checkin')
-
-                return
+            else:
+                api.Notify('Already absent')
+            
+            return
         
         lat_long = f'{str(COORDINATE_LATITUDE)},{str(COORDINATE_LONGITUDE)}'
 
@@ -56,10 +58,10 @@ def Checkout():
     try:
         last_checkin = api.GetLastCheckin()
 
-        if last_checkin['last_action'] == 2:
-            now = datetime.datetime.now(pytz.timezone('Asia/Jakarta'))
+        now = datetime.datetime.now(pytz.timezone('Asia/Jakarta'))
 
-            if last_checkin['date'] == str(now.date()):
+        if last_checkin['date'] == str(now.date()):
+            if last_checkin['last_action'] == 2:
                 api.Notify('Already checkout')
 
                 return

@@ -34,9 +34,7 @@ def Checkin(lat_long):
     response = requests.request('POST', f'https://{HOST}/Mobileapi/CheckInPost', headers=GetHeaders(), data=payload)
 
     if response.status_code < 200 or response.status_code > 299:
-        print(response.text)
-        
-        raise Exception('API error Checkin')
+        raise Exception('API error Checkin: ' + response.text)
     
     return True
 
@@ -56,9 +54,7 @@ def Checkout(last_checkin_id, lat_long):
     response = requests.request('POST', f'https://{HOST}/Mobileapi/CheckInPost', headers=GetHeaders(), data=payload)
 
     if response.status_code < 200 or response.status_code > 299:
-        print(response.text)
-        
-        raise Exception('API error Checkout')
+        raise Exception('API error Checkout: ' + response.text)
     
     return True
 
@@ -70,9 +66,7 @@ def GetLastCheckin():
     response = requests.request('POST', f'https://{HOST}/Mobileapi/LastCheckIndeatils', headers=GetHeaders(), data=payload)
 
     if response.status_code < 200 or response.status_code > 299:
-        print(response.text)
-
-        raise Exception('API error GetLastCheckin')
+        raise Exception('API error GetLastCheckin: ' + response.text)
     
     data = response.json()['message']
 
@@ -82,8 +76,6 @@ def Notify(message):
     response = requests.request('GET', f'https://api.telegram.org/bot{BOT_TOKEN}/sendMessage?chat_id={BOT_CHAT_ID}&text={message}')
 
     if response.status_code < 200 or response.status_code > 299:
-        print(response.text)
-
-        raise Exception('API error Notify')
+        raise Exception('API error Notify: ' + response.text)
 
     return True

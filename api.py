@@ -26,7 +26,7 @@ def Checkin(lat_long):
         'purpose': ''
     })
 
-    response = requests.request('POST', f'{HOST}/Mobileapi/CheckInPost', headers=GetHeaders(), data=payload)
+    response = requests.request('POST', f'https://{HOST}/Mobileapi/CheckInPost', headers=GetHeaders(), data=payload)
 
     if response.status_code < 200 or response.status_code > 299:
         print(response.text)
@@ -48,7 +48,7 @@ def Checkout(last_checkin_id, lat_long):
         'purpose': ''
     })
 
-    response = requests.request('POST', f'{HOST}/Mobileapi/CheckInPost', headers=GetHeaders(), data=payload)
+    response = requests.request('POST', f'https://{HOST}/Mobileapi/CheckInPost', headers=GetHeaders(), data=payload)
 
     if response.status_code < 200 or response.status_code > 299:
         print(response.text)
@@ -62,7 +62,7 @@ def GetLastCheckin():
         'token': TOKEN,
     })
 
-    response = requests.request('POST', f'{HOST}/Mobileapi/LastCheckIndeatils', headers=GetHeaders(), data=payload)
+    response = requests.request('POST', f'https://{HOST}/Mobileapi/LastCheckIndeatils', headers=GetHeaders(), data=payload)
 
     if response.status_code < 200 or response.status_code > 299:
         print(response.text)

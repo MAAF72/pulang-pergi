@@ -6,6 +6,9 @@ import base64
 HOST = os.environ['HOST']
 TOKEN = os.environ['TOKEN']
 
+BOT_TOKEN = os.environ['BOT_TOKEN']
+BOT_CHAT_ID = os.environ['BOT_CHAT_ID']
+
 def GetHeaders():
     headers = {
         'content-type': 'application/json',
@@ -13,6 +16,8 @@ def GetHeaders():
         'host': HOST,
         'connection': 'Keep-Alive',
     }
+
+    return headers
 
 def Checkin(lat_long):
     payload = json.dumps({
@@ -31,7 +36,7 @@ def Checkin(lat_long):
     if response.status_code < 200 or response.status_code > 299:
         print(response.text)
         
-        raise 'API error Checkin'
+        raise Exception('API error Checkin')
     
     return True
 
@@ -53,7 +58,7 @@ def Checkout(last_checkin_id, lat_long):
     if response.status_code < 200 or response.status_code > 299:
         print(response.text)
         
-        raise 'API error Checkout'
+        raise Exception('API error Checkout')
     
     return True
 
@@ -67,8 +72,18 @@ def GetLastCheckin():
     if response.status_code < 200 or response.status_code > 299:
         print(response.text)
 
-        raise 'API error GetLastCheckin'
+        raise Exception('API error GetLastCheckin')
     
     data = response.json()['message']
 
     return data
+
+def Notify(message):
+    response = requests.request('GET', f'https://api.telegram.org/bot{BOT_TOKEN}/sendMessage?chat_id={BOT_CHAT_ID}&text={message}')
+
+    if response.status_code < 200 or response.status_code > 299:
+        print(response.text)
+
+        raise Exception('API error Notify')
+
+    return True

@@ -22,7 +22,7 @@ def CheckHoliday():
         if str(now.date()) in data:
             return True
     except Exception as e:
-        print('Error occured in CheckHoliday:', e)
+        api.Notify('Error occured in CheckHoliday:', e)
 
     return False
 
@@ -30,48 +30,52 @@ def Checkin():
     if CheckHoliday():
         return
     
-    last_checkin = api.GetLastCheckin()
+    try:
+        last_checkin = api.GetLastCheckin()
 
-    if last_checkin['last_action'] == 1:
-        now = datetime.datetime.now(pytz.timezone('Asia/Jakarta'))
+        if last_checkin['last_action'] == 1:
+            now = datetime.datetime.now(pytz.timezone('Asia/Jakarta'))
 
-        if last_checkin['date'] == str(now.date()):
-            print('Already checkin')
+            if last_checkin['date'] == str(now.date()):
+                api.Notify('Already checkin')
 
-            return
-    
-    lat_long = f'{str(COORDINATE_LATITUDE)},{str(COORDINATE_LONGITUDE)}'
+                return
+        
+        lat_long = f'{str(COORDINATE_LATITUDE)},{str(COORDINATE_LONGITUDE)}'
 
-    api.Checkin(lat_long)
-
-    print('Checkin success')
-
+        api.Checkin(lat_long)
+    except Exception as e:
+        api.Notify(e)
+    else:
+        api.Notify('Checkin success')
 
 def Checkout():
     if CheckHoliday():
         return
     
-    last_checkin = api.GetLastCheckin()
+    try:
+        last_checkin = api.GetLastCheckin()
 
-    if last_checkin['last_action'] == 2:
-        now = datetime.datetime.now(pytz.timezone('Asia/Jakarta'))
+        if last_checkin['last_action'] == 2:
+            now = datetime.datetime.now(pytz.timezone('Asia/Jakarta'))
 
-        if last_checkin['date'] == str(now.date()):
-            print('Already checkout')
+            if last_checkin['date'] == str(now.date()):
+                api.Notify('Already checkout')
 
-            return
-    
-    last_checkin_id = last_checkin['id']
-    lat_long = f'{str(COORDINATE_LATITUDE)},{str(COORDINATE_LONGITUDE)}'
+                return
+        
+        last_checkin_id = last_checkin['id']
+        lat_long = f'{str(COORDINATE_LATITUDE)},{str(COORDINATE_LONGITUDE)}'
 
-    api.Checkout(last_checkin_id, lat_long)
-
-    print('Checkout success')
-
+        api.Checkout(last_checkin_id, lat_long)
+    except Exception as e:
+        api.Notify(e)
+    else:
+        api.Notify('Checkout success')
 
 if args.action == 'checkin':
     Checkin()
 elif args.action == 'checkout':
     Checkout()
 else:
-    print('Unknown action')
+    api.Notify('Unknown action')

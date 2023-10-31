@@ -51,3 +51,5 @@ jobs:
           TOKEN: ${{ secrets.TOKEN }}
           COORDINATE_LATITUDE: ${{ vars.COORDINATE_LATITUDE }}
           COORDINATE_LONGITUDE: ${{ vars.COORDINATE_LONGITUDE }}
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          BOT_CHAT_ID: ${{ vars.BOT_CHAT_ID }}

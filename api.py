@@ -17,7 +17,7 @@ def GetHeaders():
 def Checkin(lat_long):
     payload = json.dumps({
         'token': TOKEN,
-        'location': base64.b64encode(lat_long),
+        'location': base64.b64encode(lat_long.encode('ascii')).decode('ascii'),
         'lat_long': lat_long,
         'message': '',
         'location_type': 2,

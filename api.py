@@ -39,7 +39,7 @@ def Checkout(last_checkin_id, lat_long):
     payload = json.dumps({
         'id': last_checkin_id,
         'token': TOKEN,
-        'location': base64.b64encode(lat_long),
+        'location': base64.b64encode(lat_long.encode('ascii')).decode('ascii'),
         'lat_long': lat_long,
         'message': '',
         'location_type': 2,

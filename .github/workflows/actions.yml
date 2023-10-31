@@ -1,0 +1,28 @@
+name: CI
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        required: true
+        default: 'checkin'
+        type: choice
+        options:
+        - checkin
+        - checkout
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.8.10'
+      - name: Setup Depedencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Execute
+        run: python main.py --action ${{ inputs.action }}

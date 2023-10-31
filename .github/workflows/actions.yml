@@ -1,5 +1,8 @@
 name: PulangPergi
 on:
+  schedule:
+    - cron: '0 1 * * 1,2,3,4,5'
+    - cron: '0 12 * * 1,2,3,4,5'
   workflow_dispatch:
     inputs:
       action:
@@ -25,8 +28,24 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+      - name: Determine action
+        id: determine_action
+        run: |
+          action="unknown"
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            action=${{ github.event.inputs.action }}
+          elif [ "${{ github.event_name }}" == "schedule" ]; then
+            cron_expression=${{ github.event.schedule }}
+            if [ "$cron_expression" == "0 1 * * 1,2,3,4,5" ]; then
+              action="checkin"
+            elif [ "$cron_expression" == "0 12 * * 1,2,3,4,5" ]; then
+              action="checkout"
+            fi
+          fi
+          echo "Selected action: ${action}"
+          echo "ACTION=$action" >> $GITHUB_ENV
       - name: Execute
-        run: python main.py --action ${{ inputs.action }}
+        run: python main.py --action ${{ env.ACTION }}
         env:
           HOST: ${{ vars.HOST }}
           TOKEN: ${{ secrets.TOKEN }}

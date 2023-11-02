@@ -1,7 +1,7 @@
 name: PulangPergi
 on:
   schedule:
-    - cron: '0 1 * * 1,2,3,4,5'
+    - cron: '0 0 * * 1,2,3,4,5'
     - cron: '0 12 * * 1,2,3,4,5'
   workflow_dispatch:
     inputs:
@@ -36,7 +36,7 @@ jobs:
             action=${{ github.event.inputs.action }}
           elif [ "${{ github.event_name }}" == "schedule" ]; then
             cron_expression="${{ github.event.schedule }}"
-            if [ "$cron_expression" == "0 1 * * 1,2,3,4,5" ]; then
+            if [ "$cron_expression" == "0 0 * * 1,2,3,4,5" ]; then
               action="checkin"
             elif [ "$cron_expression" == "0 12 * * 1,2,3,4,5" ]; then
               action="checkout"
